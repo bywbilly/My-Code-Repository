@@ -1,2 +1,2 @@
 # My-Code-Repository
-For saving my own code about OJ
+This repository is used to save and manange my codes about the problems in OJs.
