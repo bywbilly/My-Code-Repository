@@ -45,8 +45,10 @@ inline void shit(){
 	freopen("","w",stdout);
 }
 
+int pos;
 struct point
 {
+	int id;
     double x,y;
     point(){}
     point(double x,double y):x(x),y(y){}
@@ -67,7 +69,7 @@ struct point
     {
          return(point(x*cos(t)-y*sin(t),x*sin(t)+y*cos(t)));
     }
-};
+}p[111111];
 inline point operator +(const point &a,const point &b)
 {
     return(point(a.x+b.x,a.y+b.y));
@@ -84,10 +86,7 @@ inline point operator /(const point &a,double b)
 {
     return(point(a.x/b,a.y/b));
 }
-inline bool operator <(const point &a,const point &b)
-{
-    return((sign(a.x-b.x)<0 || sign(a.x-b.x)==0) && sign(a.y-b.y)<0);
-}
+
 inline double dot(const point &a,const point &b)
 {
     return(a.x*b.x+a.y*b.y);
@@ -99,6 +98,13 @@ inline double det(const point &a,const point &b)
 inline double dist(const point &a,const point &b)
 {
     return((a-b).len());
+}
+inline bool operator <(const point &a,const point &b){
+	double tmp = det(a - p[pos],b - p[pos]);
+	if (sign(tmp) == 0)
+		return dist(p[pos],a) < dist(p[pos],b);
+	else if (sign(tmp) < 0) return 0;
+	return 1;
 }
 inline int side(const point &p,const point &a,const point &b)
 {
@@ -148,9 +154,34 @@ inline void convex(int &n,point a[])
         a[i]=b[i];
 }
 
+const int maxn = 2000000 + 10;
+
+int n;
+int vis[maxn];
+
 int main()
 {
-
+	int T; cin>>T;
+	while(T--){
+		double mindeg = 10.0 * PIE;
+		scanf("%d",&n);
+		for (int i = 1;i <= n;i++){
+			int id; double x,y; 
+			scanf("%d%lf%lf",&id,&x,&y);
+			p[i] = point(x,y);
+			p[i].id = id;
+			if (p[i].y < p[1].y || (p[i].y == p[1].y && p[i].x < p[1].x))
+				swap(p[1],p[i]);
+		}
+		pos = 1; 
+		printf("%d %d ",n,p[pos].id);
+		for (int i = 2;i <= n;i++){
+			sort(p + i,p + n + 1);
+			printf("%d ",p[i].id);
+			pos++;	
+		}
+		puts("");
+	}
 
 	return 0;
 }
